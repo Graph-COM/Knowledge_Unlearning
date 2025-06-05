@@ -1,7 +1,7 @@
 # "Do LLMs Really Forget? Evaluating Unlearning with Knowledge Correlation and Confidence Awareness" Project
 
 ## Overview
-This project focuses on our proposed knowledge unlearning framework for large language models (LLMs). This codebase provides the official implementation of our framework introduced in the paper.
+This project focuses on our proposed knowledge unlearning framework for LLMs. This codebase provides the official implementation of our framework introduced in the paper.
 
 ## Environment Setup
 
