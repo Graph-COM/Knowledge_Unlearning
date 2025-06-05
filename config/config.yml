@@ -1,0 +1,42 @@
+seed: 42
+
+huggingface:
+  hf_token: ""
+
+model:
+  name: "Qwen/Qwen2.5-7B-Instruct"    # Model name
+  checkpoint_path: ""                 # If there is a finetuned model checkpoint, provide the relative path (e.g., "./output/model"), otherwise leave it empty
+  # cuda_device: "2,3,4,5"                # If multi_gpu is true, provide the cuda device ids (e.g., "0,1,2,3") otherwise provide the single cuda device id (e.g., "0")
+  multi_gpu: false
+  max_seq_length: 512
+
+finetune:
+  epochs: 2
+  learning_rate: 5e-5
+  batch_size: 4
+  use_lora: true                   # Whether to use LoRA for finetuning (true for LoRA, false for standard finetuning)
+  use_qlora: false
+  use_dpo: true
+  beta: 0.1
+
+dataset:
+  kg_name: "yago3-10"   # Name of the knowledge graph (e.g., wn18rr, fb15k237, umls, nation, yago3-10)
+  finetune_dir: "./src/data/yago3-10/"   # Directory to the finetuning dataset (relative path, can be modified)
+  query_path: "./src/data/yago3-10/yago3-10_query_dataset.json"        # Path to the query dataset (relative path, can be modified)
+  ground_truth_path: "./src/data/yago3-10/yago3-10_fulltext_corpus.txt"
+
+subgraph:
+  k_hops: 2                                    # Maximum hop distance for subgraph expansion
+  thresholds: [-3.104822, -2.515555, -2.155438]    # Logprob thresholds for filtering relations
+  subgraph_target_triple: ["Chatou","isLocatedIn","France"]                   # Specify a target triple (if empty, the system selects one)
+
+unlearn:
+  triples: ["Chatou","isLocatedIn","France"]   # Specify a target triple (if empty, the system selects one)
+  method: "gradient_ascent"                    # Unlearning method (gradient_ascent)
+
+output:
+  model_dir: "./output/model/finetune/qwen2.5-7b-instruct/yago3-10-2epochs-lora-dpo/"                     # Directory to save the finetuned model
+  unlearn_model_dir: "./output/unlearn_model/qwen2.5-7b-instruct/yago3-10-2epochs-lora-dpo/"
+  predictions_file: "./output/predictions/qwen2.5-7b-instruct/yago3-10_qwen2point5_7b_instruct_predictions.txt"    # File to save responses obtained from the query
+  subgraph_file: "./output/subgraph/subgraph_yago3-10.txt"  # File to save extracted subgraph
+  evaluation_output_file: "./output/evaluation/evaluation_yago3-10.txt"  # File to save evaluation results

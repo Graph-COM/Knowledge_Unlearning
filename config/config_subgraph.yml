@@ -1,0 +1,91 @@
+seed: 42
+
+huggingface:
+  hf_token: ""
+
+model:
+  name: "meta-llama/Llama-3.1-8B-Instruct" 
+  use_huggingface_self_trained_model: false
+  merge_lora: false # If use finetuned model
+  save_merged_model_path: "" # If use finetuned model
+  checkpoint_path: ""  # If use finetuned model
+  # cuda_device: "2,3,4,5"                # If multi_gpu is true, provide the cuda device ids (e.g., "0,1,2,3") otherwise provide the single cuda device id (e.g., "0")
+  multi_gpu: false
+  max_seq_length: 512
+  use_vllm: true
+  vllm_kwargs:
+    gpu_memory_utilization: 0.9
+    tensor_parallel_size: 1
+    dtype: "bfloat16"
+    enforce_eager: false
+    max_model_len: 512
+
+finetune:
+  use_lora: true                   # Whether to use LoRA for finetuning (true for LoRA, false for standard finetuning)
+  use_qlora: false
+
+
+dataset:
+  kg_name: "yago3-10"  
+
+subgraph:
+  use_entropy: true
+  entropy_threshold: 1
+  k_hops: 3                                    # Maximum hop distance for subgraph expansion
+  times: 1
+  batch_size: 500
+  thresholds: [0.5, 0.8, 0.9]    # Logprob thresholds for filtering relations
+  confidence_threshold: 2
+  eval_unlearn_triples: false
+  score_unlearn_triples: false
+  unlearn_method: "no_unlearn"
+  max_estimated_queries: 5000
+  min_subgraph_size: 5
+  num_valid_subgraphs: 100000
+  use_query_relations: false
+  triple_range: [0, 100000]
+  query_relations: [
+    "hasAcademicAdvisor",
+    "hasWonPrize",
+    "graduatedFrom",
+    "hasCurrency",
+    "hasOfficialLanguage",
+    "worksAt",
+    "imports",
+    "hasCapital",
+    "isMarriedTo",
+    "playsFor",
+    "isConnectedTo",
+    "isLocatedIn",
+    "owns",
+    "created",
+    "isLeaderOf",
+    "wasBornIn",
+    "isInterestedIn",
+    "influences",
+    "dealsWith",
+    "actedIn",
+    "livesIn",
+    "exports",
+    "hasWebsite",
+    "hasChild",
+    "isCitizenOf",
+    "hasMusicalRole",
+    "isAffiliatedTo",
+    "happenedIn",
+    "isPoliticianOf",
+    "directed",
+    "wroteMusicFor",
+    "isKnownFor",
+    "diedIn",
+    "edited",
+    "participatedIn"
+  ]
+
+output:
+  subgraph_dir: ""  # Directory to save extracted subgraph
+  score_dir: "./output/evaluation"
+  evaluation_output_file: "./output/evaluation/evaluation_yago3-10.txt"  # File to save evaluation results
+
+llm_judge:
+  use_judge: false

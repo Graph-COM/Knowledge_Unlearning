@@ -1,0 +1,45 @@
+seed: 42
+
+huggingface:
+  hf_token: ""
+
+model:
+  name: "Qwen/Qwen2.5-7B-Instruct"  
+  merge_lora: false #true
+  save_merged_model_path: ""
+  checkpoint_path: "" 
+  multi_gpu: false
+  max_seq_length: 512
+
+  # vLLM configuration for accelerated inference
+  use_vllm: true
+  explicit: false
+  use_batch: true
+  vllm_kwargs:
+    gpu_memory_utilization: 0.9
+    tensor_parallel_size: 1
+    dtype: "bfloat16"
+    enforce_eager: false
+    max_model_len: 512
+
+finetune:
+  use_lora: true
+  use_qlora: false
+
+kg:
+  name: "yago3-10"
+
+# Metric method for threshold selection: "perplexity", "logprob", or "llm_score"
+metric: "logprob"
+
+# Number of positive and negative evaluation samples
+num_samples: 332 #128
+
+# Optional: directory to cache computed scores
+cache_path: "data/score_cache"
+
+# FPR values to evaluate threshold performance
+fpr_values: [0.01, 0.05, 0.2]
+
+# Score ratio values for confidence threshold computation
+ratio_values: [0.8, 0.95, 0.98]

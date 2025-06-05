@@ -1,0 +1,47 @@
+seed: 42
+
+huggingface:
+  hf_token: ""
+  push_to_hub: false
+  hub_model_id: ""
+
+dataset:
+  kg_name: "yago3-10"
+
+model:
+  name: "meta-llama/Llama-3.1-8B-Instruct"  
+  # checkpoint_path: ""                 
+  merge_lora: false # If use finetuned model
+  save_merged_model_path: "" # If use finetuned model
+  checkpoint_path: ""  # If use finetuned model
+  multi_gpu: true
+  max_seq_length: 512
+  use_deepspeed: true
+  deepspeed_config_type: "zero2"    # Options: "zero1", "zero2", "zero3"
+  gradient_accumulation_steps: 2
+  use_vllm: false
+  vllm_kwargs:
+    gpu_memory_utilization: 0.8
+    tensor_parallel_size: 1
+    dtype: "bfloat16"
+    enforce_eager: false
+    max_model_len: 512
+
+unlearn:
+  # triples: [["Chatou","isLocatedIn","France"]]   # The triples to be unlearned
+  resume_from_checkpoint: null # Path to checkpoint to resume from, or "latest" to use most recent checkpoint
+  use_QA_unlearning: true
+  peft_config: "LoRA"                           # Whether to use PEFT for unlearning
+  method: "gradient_ascent"                    # Unlearning method (e.g., gradient_ascent, random_label, ascent_plus_descent, scrub, negative_preference_optimization)
+  batch_size: 2                                # Unlearning batch size
+  epochs: 10                                   # Number of unlearning epochs (if ascent_plus_descent or SCRUB, epochs = GA epochs / 2)
+  learning_rate: 1e-5                          # Learning rate for unlearning
+  noise_multiplier: 1e-5
+  clip_norm: 1.0
+
+finetune:
+  use_lora: false                               # Whether to use LoRA for unlearning
+  use_qlora: false                             # Whether to use QLoRA for unlearning
+
+output:
+  unlearn_model_dir: ""  # Directory for unlearned models
