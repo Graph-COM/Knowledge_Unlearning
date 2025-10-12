@@ -1,4 +1,4 @@
-# [NeurIPS 2025]Do LLMs Really Forget? Evaluating Unlearning with Knowledge Correlation and Confidence Awareness
+# [NeurIPS 2025] Do LLMs Really Forget? Evaluating Unlearning with Knowledge Correlation and Confidence Awareness
 
 ## Overview
 This project focuses on our proposed knowledge unlearning framework for LLMs. This codebase provides the official implementation of our framework introduced in the paper.
